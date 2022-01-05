@@ -1,0 +1,59 @@
+﻿@page "/counter"
+
+<PageTitle>Counter</PageTitle>
+
+<h1>Counter</h1>
+
+<p role="status">Current count: @currentCount</p>
+
+<button class="btn btn-primary" @onclick="IncrementCount">Tell opp</button>
+
+<button class="btn btn-primary" @onclick="DecrementCount">Tell ned</button>
+
+<input @bind-value="@text" />
+
+<Check TValue="bool">Check me out</Check>
+
+<Jumbotron Background="Background.Light" Margin="Margin.Is4.FromBottom">
+    <JumbotronTitle Size="JumbotronTitleSize.Is4">Hello, world!</JumbotronTitle>
+    <JumbotronSubtitle>
+        This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.
+    </JumbotronSubtitle>
+    <Divider></Divider>
+    <Paragraph>
+        It uses utility classes for typography and spacing to space content out within the larger container.
+    </Paragraph>
+</Jumbotron>
+
+@code {
+    [Inject] INotificationService NotificationService { get; set; }
+    [Inject] IMessageService MessageService {  get;  set; }
+
+    private int currentCount = 0;
+    private string text = "Test";
+
+    private void IncrementCount()
+    {
+        Console.Write(text);
+
+        currentCount++;
+    }
+
+    private void DecrementCount()
+    {
+        currentCount = GetNumber(); //currentCount - 1;
+
+        NotificationService.Info("Tallet ble: " + currentCount);
+        MessageService.Warning("Test", "MessageTest");
+
+    }
+
+    private int GetNumber()
+    {
+        var i = Random.Shared.Next(1, 100);
+
+        return i;
+
+    }
+
+}

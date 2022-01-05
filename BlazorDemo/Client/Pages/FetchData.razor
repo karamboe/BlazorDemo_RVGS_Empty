@@ -1,0 +1,104 @@
+﻿@page "/fetchdata"
+@using BlazorDemo.Shared
+@inject HttpClient Http
+
+<PageTitle>Weather forecast</PageTitle>
+
+<h1>Weather forecast</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+@if (weather == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <h3>@weather.Credit</h3>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Tid</th>
+                <th>Været</th>
+                <th>Temp.</th>
+                <th>Nedbør</th>
+                <th>Sansynlighet</th>
+                <th>Vind</th>
+                <th>Vindretning</th>
+                <th>Trykk</th>                                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in weather.WeatherItems)
+            {
+                <tr>
+                    <td>@i.TimeFrom</td>
+                    <td>                        
+                       <img src="yr/@MakeYrImageUrl(i)" alt="@i.SymbolName" width="40" height="40" />
+                    </td>
+                    
+                    <td>@i.Temp</td>
+                    <td></td>
+                    <td></td>
+                    <td>@i.WindSpeedMPS</td>
+                    <td>@i.WindDirectionName</td>
+                    <td>@i.Pressure</td>                    
+                </tr>
+            }
+        </tbody>
+    </table>
+@*
+    <DataGrid TItem="WeatherItem"
+          Data="@weather.WeatherItems"
+          @bind-SelectedRow="@selectedWeather"
+          Editable
+          Responsive>
+        <DataGridCommandColumn TItem="WeatherItem" />
+        <DataGridColumn TItem="WeatherItem" Field="@nameof(WeatherItem.TimeFrom)" Caption="Fra" Sortable="true" />
+        <DataGridColumn TItem="WeatherItem" Field="@nameof(WeatherItem.TimeTo)" Caption="Til" Editable="true" />
+        <DataGridColumn TItem="WeatherItem" Field="@nameof(WeatherItem.Temp)" Caption="Temp (C)" Editable="true" />        
+        <DataGridColumn TItem="WeatherItem" Field="@nameof(WeatherItem.WindDirectionName)" Caption="Vindretning" Editable="true" />
+        
+        <DataGridColumn TItem="WeatherItem" Field="@nameof(WeatherItem.Temp)" Caption="Action" Editable="false">
+            <DisplayTemplate>
+                <div class="btn-toolbar flex-nowrap">
+                    <button type="button" class="btn btn-outline" @onclick=@(async (e) => await EditResult(e, context))>
+                        <span class="oi oi-pencil"></span>
+                    </button>
+                    <button type="button" class="btn btn-outline" @onclick=@(async (e) => await DeleteResult(e, context))>
+                        <span class="oi oi-trash"></span>
+                    </button>
+                </div>
+            </DisplayTemplate>
+        </DataGridColumn>
+
+    </DataGrid>*@
+
+}
+
+@code {
+    private WeatherForecast[]? forecasts;
+    private WeatherItem selectedWeather { get; set; }
+    private WeatherData weather { get; set; }
+
+    private string MakeYrImageUrl(WeatherItem i)
+    {
+        //return $"<img src=\"~/yr/{i.SymbolNumber}.svg\" alt=\"{i.SymbolName}\" width=\"100\" height=\"100\" />";
+        return $"{i.SymbolNumber}.svg";
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        weather = await Http.GetFromJsonAsync<WeatherData>("WeatherForecast");
+    }
+
+    private async Task EditResult(MouseEventArgs e, WeatherItem m)
+    {
+        await Task.Delay(1);
+    }
+    private async Task DeleteResult(MouseEventArgs e, WeatherItem m)
+    {
+        await Task.Delay(1);
+    }
+}
